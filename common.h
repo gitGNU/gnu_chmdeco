@@ -116,6 +116,22 @@ with non-unix compilers eg MSVC
 	#define memcpy(d,s,n) bcopy((s),(d),(n)
 #endif
 
+#if HAVE_STDBOOL_H
+	#include <stdbool.h>
+#else
+	#if ! HAVE__BOOL
+		#ifdef __cplusplus
+			typedef bool _Bool;
+		#else
+			typedef unsigned char _Bool;
+		#endif
+	#endif
+	#define bool _Bool
+	#define false 0
+	#define true 1
+	#define __bool_true_false_are_defined 1
+#endif
+
 
 #else /* !HAVE_CONFIG_H */
 
@@ -130,6 +146,7 @@ with non-unix compilers eg MSVC
 #include <time.h>
 #include <utime.h>
 #include <dirent.h>
+#include <stdbool.h>
 #define PACKAGE "chmdeco"
 #define VERSION "x.x"
 
@@ -180,10 +197,6 @@ typedef uint8_t BYTE; /* 1-byte integer */
 typedef uint16_t WORD; /* 2-byte integer */
 typedef uint32_t DWORD; /* 4-byte integer */
 typedef uint64_t QWORD; /* 8-byte integer */
-
-typedef char bool;
-#define true 1
-#define false 0
 
 typedef QWORD ENCINT; /* Encoded integer base type. This can be increased in size if need be */
 typedef QWORD SRINT; /* Encoded integer base type. This can be increased in size if need be */
