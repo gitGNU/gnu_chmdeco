@@ -1,0 +1,22 @@
+#------------------------------------------------------------------------------
+# Microsoft InfoTech Storage/Compiled HTML Help files
+#
+# From <pabs@zip.to> (part of chmdeco package)
+0	string	ITSF	InfoTech Storage File
+>4	string	\2\0\0\0	(version 2)
+>4	string	\3\0\0\0	(version 3)
+#>4	else		(unknown version)
+
+#Some internal files that have a signature of some sort
+
+0	string	T#SM	MS Compiled HTML Help internal file: #IDXHDR
+
+0	string	\0\0\0\4	MS Compiled HTML Help internal file: $OBJINST
+
+0	string	\0\0\x28\0	MS Compiled HTML Help internal file: $FIftiMain
+
+#Could also be a file extracted from MS WinHelp (.HLP) files
+0	string	;)	MS Compiled HTML Help internal file: $WW<????>Links/BTree
+
+#The magic for this repeats to the end of the file, but I dunno how to specify this
+0	string	\0\0\0\0\5\0\0\0\x80\0\0\0\0	MS Compiled HTML Help internal file: $WW<????>Links/Data

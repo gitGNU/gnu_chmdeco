@@ -1,0 +1,13 @@
+Options:
+	timestamps in integer/date format
+	print out the window properties that are marked invalid in comments
+
+Features:
+	recreate hhc/k without the #TOCIDX/BTree files - maybe impossible
+	samples - need proper recursive dir search
+	[TEXT POPUPS] - "
+	html file processing:
+		alinks - need a html editing parser & a general ww-links-btree interface
+		split - ", maybe impossible
+	recreate HTML files from the $FIftiMain file (search info)
+		- this is no joke it may actually be possible

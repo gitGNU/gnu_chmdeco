@@ -1,0 +1,10 @@
+Matthew Russotto <mrussotto@speakeasy.net>:
+For providing the first publicly available documentation on the InfoTech
+Storage Format, and writing tools to extract them.
+
+The folks at http://www.keytools.net:
+For publishing the details of the ITStorage interface in a code sample
+
+Jed Wing  <jedwin@ugcs.caltech.edu>:
+For writing chmlib and for providing me with details of the internal $FIftiMain
+file, which allowed me to create the -f option

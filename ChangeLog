@@ -1,0 +1,18 @@
+2003-01-17  Pabs  <pabs3@zip.to>
+
+	* version.h: Bump version number
+
+	* hhp.c (recreate_hhp): Remember that prefix_size is zero after freeing;
+	Fixes crash with multiple input dirs
+
+	* misc.c (recreate_alias_map): Fixed output of alias.ali, map.h files and
+	indirectly [ALIAS] & [MAP] sections in the HHP.
+
+2003-01-15  Pabs  <pabs3@zip.to>
+
+	* convert.c (make_FILETIME_string): Preliminary FILETIME output added,
+	then removed, because it became obvious it wasn't a FILETIME.
+	More testing needed
+	* hhp.c (recreate_hhp): Removed FILETIME output until it is deciphered
+
+	* hhp.c (recreate_hhp): Fixed output of input name (no more '/' at start)
