@@ -1,0 +1,46 @@
+Summary: Compiled HTML Help (CHM) decompiler
+Name: @PACKAGE@
+Version: @VERSION@
+Release: 1
+Group: Applications/Emulators
+Copyright: GPL
+Source: http://bonedaddy.net/pabs3/hhm/%{name}-%{version}.tar.gz
+URL: http://bonedaddy.net/pabs3/hhm/#chmdeco
+Vendor: Pabs <pabs@zip.to>
+BuildRoot: /var/tmp/%{name}-%{version}-root
+Prefix: /usr
+
+%description
+A program to convert the internal files of Compiled HTML Help (CHM) files back
+into the authoring files used by the CHM compiler to create the CHM files in
+the first place.
+
+CHM files are used on the Micosoft Windows platform to store program
+documentation, almost always in the form of HTML, with some non-standard quirks.
+CHM files are a form of archive known as InfoTech Storage Format (ITSF) files
+and contain some special files to implement features of the CHM viewer. On
+Windows they are accessed through a kind of virtual filesystem exposed by a
+dynamically loaded library. ITSF files have UTF-8 filenames and use an LZX
+cruncher to compress all the files in one big chunk. Both the ITSF and the
+formats of the internal CHM files are highly indexed and their designs are
+all clearly optimized for read-only access.
+
+%prep
+%setup
+
+%build
+CFLAGS=${RPM_OPT_FLAGS} ./configure --prefix=%{prefix}
+make
+
+%install
+rm -rf ${RPM_BUILD_ROOT}
+%makeinstall
+
+%clean
+rm -rf ${RPM_BUILD_ROOT}
+
+%files
+%defattr(0644, root, root, 0755)
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO THANKS
+%attr(0755, root, root) %{_bindir}/chmdeco
+%{_mandir}/man1/chmdeco.1*

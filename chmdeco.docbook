@@ -1,0 +1,138 @@
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "/usr/share/sgml/docbook/dtd/xml/4.2/docbookx.dtd"
+
+[
+<!--
+	Process this file with docbook-to-man to generate an nroff manual
+	page: docbook-to-man chmdeco.docbook > chmdeco.1.  You may view
+	the manual page with: docbook-to-man chmdeco.docbook | nroff -man |
+	less.  A typical entry in a Makefile or Makefile.am is:
+
+chmdeco.1: chmdeco.docbook
+	docbook-to-man $< > $@
+-->
+
+	<!ENTITY firstname "<firstname>Pabs</firstname>">
+	<!ENTITY surname   "<surname></surname>">
+	<!ENTITY date      "<date>March 28, 2003</date>">
+	<!ENTITY section   "<manvolnum>1</manvolnum>">
+	<!ENTITY email     "<email>pabs@zip.to</email>">
+	<!ENTITY username  "Pabs">
+	<!ENTITY ucpackage "<refentrytitle>CHMDECO</refentrytitle>">
+	<!ENTITY package   "chmdeco">
+
+]>
+
+<refentry>
+	<refentryinfo>
+		<address>&email;</address>
+		<author>&firstname; &surname;</author>
+		<copyright><year>2003</year><holder>&username;</holder></copyright>
+		&date;
+	</refentryinfo>
+	<refmeta>&ucpackage; &section;</refmeta>
+	<refnamediv>
+		<refname>&package;</refname>
+		<refpurpose>Compiled HTML Help (CHM) decompiler</refpurpose>
+	</refnamediv>
+
+	<refsynopsisdiv>
+		<cmdsynopsis>
+			<command>&package;</command>
+			<arg><option>-p</option></arg>
+			<arg><option>-b</option></arg>
+			<arg><option>-s</option></arg>
+			<arg><option>-h</option></arg>
+			<arg><option>-e</option></arg>
+			<arg><option>-f</option></arg>
+			<arg><option>--</option></arg>
+			<arg><replaceable>directory</replaceable></arg>
+		</cmdsynopsis>
+	</refsynopsisdiv>
+
+	<refsect1>
+		<title>DESCRIPTION</title>
+
+		<para>This manual page documents briefly the <command>&package;</command> and <command>chmdeco-popups</command> commands.
+		</para>
+
+		<para><command>&package;</command> is a program that decompiles Compiled HTML Help (CHM) files.</para>
+		<para><command>chmdeco-popups</command> is a wrapper around &package; that uses standard utilities to detect files for the [TEXT POPUPS] section of the HHP.</para>
+
+	</refsect1>
+
+	<refsect1>
+		<title>OPTIONS</title>
+
+		<para>Options must be separate (eg -e -f, not -ef) and preceed each argument they apply to.
+			A summary of options is included below.
+			For a complete description, see the README file.
+		</para>
+
+		<variablelist>
+			
+			<varlistentry>
+				<term><option>-p</option></term>
+				<listitem><para>Turn on printing defaults in the [OPTIONS] section of the HHP.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>-b</option></term>
+				<listitem><para>Turn off printing the blurb at the start of the HHP.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>-s</option></term>
+				<listitem><para>Turn off printing the compilation stats at the start of the HHP.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>-h</option></term>
+				<listitem><para>Print version and usage on stderr, then exit.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>-e</option></term>
+				<listitem><para>Turn on converting the following characters in the HHC/HHK into entity refs: &amp; &amp;amp;, &lt; &amp;lt;, &gt; &amp;gt;, &quot; &amp;quot; and TM (0x99) &amp;trade;.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>-f</option></term>
+				<listitem><para>Turn on converting the full-text search information back into HTML files.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><option>--</option></term>
+				<listitem><para>Turn off options processing for the rest of the arguments.</para></listitem>
+			</varlistentry>
+
+		</variablelist>
+	</refsect1>
+
+	<refsect1>
+		<title>SEE ALSO</title>
+		<para>chm (5), hhm (1), chmlib(4), Matthew Russotto's <ulink url="http://www.speakeasy.org/~russotto/chm/chmformat.html">ITSF description</ulink>.</para>
+	</refsect1>
+
+	<refsect1>
+		<title>AUTHOR</title>
+		<para>This manual page and &package; were written by &username; &email;.</para>
+	</refsect1>
+
+</refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:4
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

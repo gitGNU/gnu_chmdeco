@@ -1,0 +1,1 @@
+?package(chmdeco):needs=text section=Apps/Tools title="chmdeco" command="sh -c '/usr/bin/chmdeco && read'"
