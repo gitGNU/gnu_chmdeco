@@ -2,7 +2,7 @@ Source: chmdeco
 Section: utils
 Priority: optional
 Maintainer: Paul Wise <pabs@zip.to>
-Build-Depends: debhelper (>> 4.0.0)
+Build-Depends: debhelper (>> 4.0.0), cdbs, docbook-to-man | xmlto | docbook-utils
 Standards-Version: 3.5.8
 
 Package: chmdeco
