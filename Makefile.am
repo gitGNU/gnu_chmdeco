@@ -23,30 +23,15 @@
 AUTOMAKE_OPTIONS = gnits
 AM_CFLAGS = -Wall
 
-## Our one and only program
-bin_PROGRAMS = chmdeco
-
-## Sources and headers for the program
-chmdeco_SOURCES = \
-chmdeco.c common.c convert.c hhc.c hhk.c hhp.c misc.c sitemap.c strings.c system.c windows.c \
-chmdeco.h common.h convert.h hhc.h hhk.h hhp.h misc.h sitemap.h strings_file.h system.h windows.h
+## Source code is located in src
+SUBDIRS = src doc
 
 ## A wrapper script that will eventually go away (FIXME)
 dist_bin_SCRIPTS = chmdeco-popups
 
-## The manpage and how to create it
-dist_man_MANS = chmdeco.1
-CLEANFILES = $(dist_man_MANS)
-EXTRA_DIST = chmdeco.docbook
-chmdeco.1: chmdeco.docbook
-	docbook-to-man $< > $@ || \
-	xmlto man $< > $@ || \
-	( docbook2man $< && mv CHMDECO.1 chmdeco.1 && rm -f manpage.links manpage.refs ) || \
-	( echo ERROR: You need a docbook to man converter && touch chmdeco.1 );
-
 ## Distribute a bunch of file(1) magic numbers
 ## FIXME: figure out how to install this
-EXTRA_DIST += magic.chmfile
+EXTRA_DIST = magic.chmfile
 
 ## Cygwin programs dump *.stackdump's not *.core
 MOSTLYCLEANFILES = *.stackdump
@@ -66,8 +51,7 @@ bindist: deb rpm nsi
 
 ## Requires the debhelper debian package
 ## debuild automatically reconfigures, compiles, etc
-EXTRA_DIST += debian/changelog debian/compat debian/control debian/copyright debian/docs debian/menu debian/rules debian/watch
-deb:
+deb: debian/changelog debian/compat debian/control debian/copyright debian/docs debian/menu debian/rules debian/watch
 	debuild
 
 ## Reqires the Redhat Package Manager (rpm)

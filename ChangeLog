@@ -2,6 +2,8 @@
 
 	* Makefile.am (nsi): upx compress the exe produced by makensis
 
+	* Move source into src dir and manpage into doc dir
+
 2005-01-14  Pabs  <pabs@zip.to>
 
 	* debian/: Remove from CVS - I'll keep this elsewhere to practice debian
