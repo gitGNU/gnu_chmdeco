@@ -1,3 +1,197 @@
+2003-08-22  Pabs  <pabs@zip.to>
+
+	* chmdeco.docbook (DOCTYPE): Changed ststem id to the web location, so it
+	will easily build on systems with an xml catalog file.
+
+2003-07-15  Pabs  <pabs@zip.to>
+
+	* chmdeco.nsi (SendTo Menu Shortcuts): Fix SendTo links
+	* chmdeco.nsi (Uninstall): Correctly delete SendTo shortcuts
+
+	* chmdeco.nsi (un.onInit): New function, sets SetShellVarContext correctly
+
+2003-06-25  Pabs  <pabs@zip.to>
+
+	* hhp.c (print_files): Now chdir up between readdir and stat and chdir down
+	at the end of the loop. Less efficient, but works on both Linux and MinGW.
+
+	* misc.c (recreate_html_from_fts): Print warning when we can't open the
+	output file, mkdir -p before opening out_file
+	* misc.c (mkdirp): New function
+
+	* hhp.c (recreate_hhp): Fix output of Title & Language (add '\r's)
+
+	* chmdeco.nsi (Uninstall): Added lots of calls to DeleteRegKey /ifempty
+
+2003-06-18  Pabs  <pabs@zip.to>
+
+	* debian/rules (binary-arch): Call dh_installmenu to install the menu file
+
+2003-06-15  Pabs  <pabs@zip.to>
+
+	* Makefile.am (chmdeco.1): Don't fail if the manpage can't be created
+
+	* Makefile.am (nsidir): Use unix2dos instead of awk
+	* Makefile.am: Add configure note for making on MinGW
+
+	* README (More info): The spec has now been released
+
+	* chmdeco.nsi: Replace @ with "" in WriteRegStr calls
+
+	* Makefile.am (COPY): Copy istorage.exe too
+
+	* Makefile.am (EXTRA_DIST): Distribute BSD and LICENCE too
+
+	* chmdeco.nsi (.onInit): Only ask for all users installation on WinNT
+	* chmdeco.nsi (.onInit): For per-user install, say so
+
+	* chmdeco.nsi: Change Executable & Docs sections to read-only
+
+	* chmdeco.nsi: Change LicenseText to shorten it to two lines
+
+	* chmdeco.nsi: Change OutFile to output in the source directory
+
+	* chmdeco.nsi (.onInit): Remove instances of InstallDirRegKey
+	* chmdeco.nsi (.onInit): Change instances of InstallDir to modify $INSTDIR
+
+	* chmdeco.nsi: Put single quotes around instances of ${PSV}
+
+	* chmdeco.nsi: Changed EnabledBitmap/DisabledBitmap to CheckBitmap
+	* chmdeco-unchecked.bmp, chmdeco-checked.bmp: Files removed
+	* Makefile.am: Use, dist checks.bmp, not the other two
+	* checks.bmp: New file
+
+	* Makefile.am (nsi): Use makensis, not makensis-bzip2
+
+2003-06-14  Pabs  <pabs@zip.to>
+
+	* debian/menu (command): Changed to run chmdeco, then pause
+
+	* Makefile.am (EXTRA_DIST): Added the 2 bitmaps & an icon for the nsi
+
+2003-06-03  Pabs  <pabs@zip.to>
+
+	* strings.h: Renamed to strings_file.h. All references changed
+	* Makefile.am (AUTOMAKE_OPTIONS): Removed nostdinc. Damn buggy compilers!
+
+2003-06-01  Pabs  <pabs@zip.to>
+
+	* chmdeco.c, common.c, convert.c, hhc.c, hhk.c, hhp.c, misc.c, sitemap.c,
+	strings.c, system.c, windows.c:
+	Removed system header includes, now use common.h
+
+	* chmdeco.docbook: Fixed so xmlto, docbook2man can process it.
+
+2003-05-31  Pabs  <pabs@zip.to>
+
+	* Makefile.am (chmdeco.1): Rule updated to allow use of xmlto or
+	docbook2man.
+
+	* Makefile.am (AUTOMAKE_OPTIONS): Added nostdinc, otherwise strings.h
+	will conflict with the system header of the same name. Bug: gcc-3.2 still
+	doesn't work with this. -I- also doesn't work. Use gcc-2.95 as a workaround
+
+	* chmdeco.c, strings.c, hhc.c, hhk.c, hhp.c, convert.c, misc.c, system.c,
+	sitemap.c, sitemap.h: Replaced PROGNAME with PACKAGE.
+
+	* chmdeco.nsi: General cleanup & user/admin install capability.
+
+	* chmdeco.c, common.h: Beginnings of autoconfiscation.
+
+2003-05-30  Pabs  <pabs@zip.to>
+
+	* debian/compat: New file. From upgraded debhelper.
+	* debian/menu: New file. Decided chmdeco should be on menu.
+	* debian/rules, debian/changelog, debian/control:
+	Incoporated changes from upgraded debhelper.
+
+2003-04-14  Pabs  <pabs@zip.to>
+
+	* chmdeco.spec.in (Group): Changed to Applications/Emulators from FIXME.
+	I'm not satisfied with this, will probably make up a better one soon.
+
+	* README (Building, usage & testing): Updated to reflect autoconfiscation &
+	new NullSoft Installer for Windows.
+
+2003-04-13  Pabs  <pabs@zip.to>
+
+	* Makefile.am: New file. The usual, plus building man page, deb, rpm, nsi.
+	* configure.ac: New file. Based on autoscan output (configure.scan).
+	* chmdeco.docbook: New file. Manpage. Based on Debian dh_make template.
+	* chmdeco.spec.in: New file. RPM buildage. Based on cabextract et al. ones.
+	* debian/changelog, control, copyright, docs, rules, watch: New files.
+	DEB buildage. Based on ones created by dh_make.
+	Template for a Debian maintainer to use.
+	* chmdeco.nsi: New file. NullSoft Installer buildage. Based on frhed one.
+	* chmdeco-unchecked.bmp, chmdeco-checked.bmp, chmdeco.ico:
+	New files. For NullSoft Installer niceness.
+	* chmdeco-popups.sh, BSD.txt, LICENCE.txt: Filename extensions removed.
+	* Makefile: File removed. Now using automake.
+
+2003-03-11  Pabs  <pabs@zip.to>
+
+	* version.h: Bump version number
+
+	* hhp.c (isinternal): files are internal if they begin with # or $; fixes
+	problems where their case has changed due to filesystem issues
+
+2003-03-10  Pabs  <pabs@zip.to>
+
+	* hhp.c (print_files): Don't chdir up and down on MinGW; fixes
+	a bug on Win32; this may have to be backed out for newer MinGWs
+
+2003-02-22  Pabs  <pabs@zip.to>
+
+	* chmdeco-popups.sh: Use awk, not gawk
+
+2003-02-22  Pabs  <pabs@zip.to>
+
+	* strings.c (open_strings): Seek back to string_buf_len,
+	not zero after checking file length; fixes crap alias output
+	* strings.c: Use the block size of the #STRINGS file, this
+	plus some more things (not done yet) will ensure that each
+	string will require at most one malloc
+
+2003-01-03  Pabs  <pabs@zip.to>
+
+	* convert.c: Fixed some language names, add others
+	(get_lcid_string): cut off the upper 16 bits (sort id, reserved)
+
+2003-01-28  Pabs  <pabs@zip.to>
+
+	* version.h: Bump version number
+
+2003-01-27  Pabs  <pabs@zip.to>
+
+	* common.c, misc.c: almost all of the bugs in fts output fixed
+
+2003-01-26  Pabs  <pabs@zip.to>
+
+	* common.c: New functions get_be_ENCINT, ffus, get_SRINT
+
+2003-01-25  Pabs  <pabs@zip.to>
+
+	* chmdeco.c: New option recreate_html (off default)
+	(main): Process -f option, call recreate_html_from_fts
+	* misc.c: New function recreate_html_from_fts
+
+	* common.h: Changed EMAIL_CHM to call fprintf
+	All users changed
+
+2003-01-23  Pabs  <pabs@zip.to>
+
+	* common.h: Changed website & email to pabs.zip.to & pabs@zip.to.
+	Also updated BSD.txt, AUTHORS, README
+
+2003-01-19  Pabs  <pabs3@zip.to>
+
+	* convert.c (print_with_entity_refs): New function.
+	* chmdeco.c: New option print_entity_refs
+	(main): process -e option
+	* hhc.c (recreate_hhc): use print_with_entity_refs
+	* hhk.c (recreate_hhk): use print_with_entity_refs
+	* sitemap.c (print_topics_entry): use print_with_entity_refs
+
 2003-01-17  Pabs  <pabs3@zip.to>
 
 	* version.h: Bump version number

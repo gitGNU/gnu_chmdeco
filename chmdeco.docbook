@@ -1,4 +1,4 @@
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "/usr/share/sgml/docbook/dtd/xml/4.2/docbookx.dtd"
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
 
 [
 <!--
@@ -69,7 +69,7 @@ chmdeco.1: chmdeco.docbook
 		</para>
 
 		<variablelist>
-			
+
 			<varlistentry>
 				<term><option>-p</option></term>
 				<listitem><para>Turn on printing defaults in the [OPTIONS] section of the HHP.</para></listitem>
