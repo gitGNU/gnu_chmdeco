@@ -90,7 +90,7 @@ struct lcid_string{
 	{ 0x042F, "FYRO Macedonian" },
 	{ 0x0430, "Sutu" },
 	{ 0x0431, "Tsonga" },
-	{ 0x0432, "Setsuana (Tswana)" }, /* FIXME: Which way around is this? */
+	{ 0x0432, "Setsuana (Tswana)" },
 	{ 0x0433, "Venda" },
 	{ 0x0434, "Xhosa" },
 	{ 0x0435, "Zulu" },

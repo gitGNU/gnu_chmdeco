@@ -1,3 +1,9 @@
+2005-04-06  Paul Wise  <pabs@zip.to>
+
+  * convert.c (lcid_strings): Remove FIXME from 0x0432 - Setsuana (Tswana),
+  HHW ouputs unknown language, the MSDN lists Setsuana, and WinXP release
+  notes list Tswana, so best to keep both names.
+
 2005-04-04  Paul Wise  <pabs@zip.to>
 
   * Makefile.am (nsi): 
