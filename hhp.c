@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,18 +27,6 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <errno.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-
-
 /* Local headers */
 
 #include "chmdeco.h"
@@ -46,7 +34,7 @@ It was written by Pabs.
 #include "convert.h"
 #include "windows.h"
 #include "system.h"
-#include "strings.h"
+#include "strings_file.h"
 #include "sitemap.h"
 #include "misc.h"
 #include "hhp.h"
@@ -109,7 +97,7 @@ void recreate_hhp( void ){
 
 		if( print_blurb )
 			fputs(
-				";This HHP file was recreated by "PROGNAME" "VERSION" (by "AUTHOR" - "WEBSITE")\r\n"
+				";This HHP file was recreated by "PACKAGE" "VERSION" (by "AUTHOR" - "WEBSITE")\r\n"
 				";It is only an approximation of the original project file.\r\n"
 				";Other files that may have been recreated with it are also only approximations.\r\n"
 				";See the documentation for parts of the HHP that cannot be recreated.\r\n\r\n", hhp
@@ -120,7 +108,7 @@ void recreate_hhp( void ){
 			/* FIXME: Print something else when we get its dumping */
 			if( input ){
 				char* fn = strrchr( input, '/' );
-				fprintf( hhp, ";Input: %s\r\n", fn ? fn : input );
+				fprintf( hhp, ";Input: %s\r\n", fn ? fn+1 : input );
 			}
 
 			{ /* Compiler name */
@@ -145,6 +133,7 @@ void recreate_hhp( void ){
 				}
 			}
 
+#if 0 /* This QWORD is totally fucked up */
 			/* Compilation date (FILETIME) */
 			if(got_stuff){
 				char* compilation_FILETIME_string = make_FILETIME_string(compilation_FILETIME);
@@ -152,6 +141,7 @@ void recreate_hhp( void ){
 				else fprintf( hhp, ";Compilation date: %llu00 nano-seconds after 0:00 Jan 1 1600\r\n", compilation_FILETIME );
 				/* FREE(compilation_FILETIME_string); */
 			}
+#endif /* 0 */
 
 			/* Operating system language */
 			if( lcid_success ){
@@ -334,8 +324,8 @@ void recreate_hhp( void ){
 			}
 			if(got_lcid){
 				char* Language_string = get_lcid_string( Language );
-				if( Language_string ) fprintf( hhp, "Language=0x%x %s\n", Language, Language_string );
-				else fprintf( hhp, "Language=0x%x\n", Language );
+				if( Language_string ) fprintf( hhp, "Language=0x%x %s\r\n", Language, Language_string );
+				else fprintf( hhp, "Language=0x%x\r\n", Language );
 			}
 		}
 
@@ -349,7 +339,7 @@ void recreate_hhp( void ){
 
 		{ /* Title */
 			char* Title = (char*)get_system( Title_CODE );
-			if( Title ) fprintf( hhp, "Title=%s\n", Title );
+			if( Title ) fprintf( hhp, "Title=%s\r\n", Title );
 			FREE( Title );
 		}
 
@@ -399,6 +389,7 @@ void recreate_hhp( void ){
 		no_files_yet = true;
 		print_files(".");
 		FREE(prefix);
+		prefix_len = prefix_size = 0;
 
 		/* [ALIAS], [MAP] */
 		if( alias_map_success ){
@@ -458,46 +449,21 @@ void recreate_hhp( void ){
 					for( i = 0; i < num_subsets; i++ )
 						fprintf( hhp, "There were %u entries in this section, but only garbage was produced\r\n", num_subsets );
 				if( (st.st_size-4)%12 )
-					fprintf( stderr, "%s: warning: %s/%s: %s\n", PROGNAME, input, "#SUBSETS", "partial entry found" );
+					fprintf( stderr, "%s: warning: %s/%s: %s\n", PACKAGE, input, "#SUBSETS", "partial entry found" );
 			}
 		}
 
 		if( !ferror(hhp) ) hhp_success = true;
-		else fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", pf, strerror(errno) );
+		else fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", pf, strerror(errno) );
 
 		FCLOSE( hhp );
 
-	} else fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", pf, strerror(errno) );
+	} else fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", pf, strerror(errno) );
 }
 
 /* Returns true if the argument is the name of an internal file */
 bool isinternal( char* f ){
-	return
-		!strcmp( f, "#BSSC" ) ||
-		!strcmp( f, "#GRPINF" ) ||
-		!strcmp( f, "#IDXHDR" ) ||
-		!strcmp( f, "#INFOTYPES" ) ||
-		!strcmp( f, "#ITBITS" ) ||
-		!strcmp( f, "#IVB" ) ||
-		!strcmp( f, "#KEY_DATA" ) ||
-		!strcmp( f, "#KEY_DELETED" ) ||
-		!strcmp( f, "#STRINGS" ) ||
-		!strcmp( f, "#SUBSETS" ) ||
-		!strcmp( f, "#SYSTEM" ) ||
-		!strcmp( f, "#TOCIDX" ) ||
-		!strcmp( f, "#TOPICS" ) ||
-		!strcmp( f, "#URLS" ) ||
-		!strcmp( f, "#URLSTR" ) ||
-		!strcmp( f, "#URLTBL" ) ||
-		!strcmp( f, "#WINDOWS" ) ||
-		!strcmp( f, "$FIftiMain" ) ||
-		!strcmp( f, "$HHTitleMap" ) ||
-		!strcmp( f, "$OBJINST" ) ||
-		!strcmp( f, "$TitleMap" ) ||
-		!strcmp( f, "$WWAssociativeLinks" ) ||
-		!strcmp( f, "$WWKeywordLinks" ) ||
-		/* The following may go away when "<input>-rec" in the current dir is where we recreate stuff */
-		!strcmp( f, "#recreated" ); /* Bit of a kludge, spose i should use the inode (which is not very portable) */
+	return *f == '#' || *f == '$';
 }
 
 /* Recurse through a dir, printing out the names of files found */
@@ -508,18 +474,17 @@ void print_files( char* d ){
 		struct stat st;
 		struct dirent* de;
 
-		/* On cygwin we need to enter the dir first */
-		chdir( d );
-
 		while( (de = readdir( dir )) ){
+
+			chdir( d );
 
 			/* Most systems define these as the current & parent dirs */
 			if( !strcmp( de->d_name, "." ) || !strcmp( de->d_name, ".." ) )
-				continue;
+				goto BACKOUT;
 
 			/* Ignore internal files, except when not in root */
 			if( (!prefix || !*prefix) && isinternal(de->d_name) )
-				continue;
+				goto BACKOUT;
 
 			/* Check if it is a subdir */
 			if( !stat( de->d_name, &st ) && S_ISDIR( st.st_mode ) ){
@@ -531,8 +496,8 @@ void print_files( char* d ){
 				if( new_prefix_size > prefix_size ){
 					char* new_prefix = (char*)realloc( prefix, new_prefix_size );
 					if( !new_prefix ){
-						fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "prefix buffer", strerror(errno) );
-						continue;
+						fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "prefix buffer", strerror(errno) );
+						goto BACKOUT;
 					}
 					prefix = new_prefix;
 					prefix_size = new_prefix_size;
@@ -561,12 +526,13 @@ void print_files( char* d ){
 				fprintf( hhp, "%s%s\r\n", prefix?prefix:"", de->d_name );
 
 			}
-		}
 
-		/* Back out */
-		if( !!strcmp( d, "." ) ) chdir( ".." );
+			/* Back out */
+			BACKOUT:
+				if( !!strcmp( d, "." ) ) chdir( ".." );
+		}
 
 		closedir( dir );
 	} else
-		fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, prefix, d, strerror(errno) );
+		fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, prefix?prefix:"", d, strerror(errno) );
 }

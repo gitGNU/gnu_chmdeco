@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,22 +27,13 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-
-
-
 /* Local headers */
 
 #include "chmdeco.h"
 #include "common.h"
+#include "convert.h"
 #include "sitemap.h"
-#include "strings.h"
+#include "strings_file.h"
 
 
 
@@ -58,17 +49,17 @@ bool open_sitemap(){
 		errno = 0;
 		topics = fopen( "#TOPICS", "rb" );
 		if( !topics && errno && errno != ENOENT )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOPICS", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOPICS", strerror(errno) );
 
 		errno = 0;
 		urltbl = fopen( "#URLTBL", "rb" );
 		if( !urltbl && errno && errno != ENOENT )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLTBL", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLTBL", strerror(errno) );
 
 		errno = 0;
 		urlstr = fopen( "#URLSTR", "rb" );
 		if( !urlstr && errno && errno != ENOENT )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLSTR", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLSTR", strerror(errno) );
 
 		if( topics && urltbl && urlstr ){
 			return true;
@@ -98,7 +89,7 @@ char* get_urlstr(off_t off){
 		/* Get more space */
 		t = (char*)realloc(ret,ret_len+GROW);
 		if( !t ){
-			fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "#URLSTR buffer", strerror(errno) );
+			fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "#URLSTR buffer", strerror(errno) );
 			FREE(ret);
 			return NULL;
 		}
@@ -107,7 +98,7 @@ char* get_urlstr(off_t off){
 
 		/* Get more bytes */
 		if( !fread(start,1,GROW,urlstr) || ferror(urlstr) ){
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLSTR", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLSTR", strerror(errno) );
 			FREE(ret);
 			return NULL;
 		}
@@ -128,7 +119,15 @@ bool print_topics_entry( FILE* f, size_t index ){
 
 		char* Name = get_string(get_DWORD(entry+4));
 
-		if(Name){ DEPTHPUT(f); fprintf( f, "\t<param name=\"Name\" value=\"%s\">\r\n", Name ); FREE(Name); }
+		if(Name){
+			DEPTHPUT(f);
+			if( print_entity_refs ){
+				fputs( "\t<param name=\"Name\" value=\"", f );
+				print_with_entity_refs( f, Name );
+				fputs( "\">\r\n", f );
+			} else fprintf( f, "\t<param name=\"Name\" value=\"%s\">\r\n", Name );
+			FREE(Name);
+		}
 
 		fseek( urltbl, get_DWORD(entry+8)+8, SEEK_SET);
 		if( read_DWORD(urltbl,&urlstr_offset) ){
@@ -141,20 +140,44 @@ bool print_topics_entry( FILE* f, size_t index ){
 				char* FrameName_s = NULL;
 
 				char* Local = get_urlstr(urlstr_offset+8);
-				if(Local){ DEPTHPUT(f); fprintf( f, "\t<param name=\"Local\" value=\"%s\">\r\n", Local ); FREE(Local); }
+				if(Local){
+					DEPTHPUT(f);
+					if( print_entity_refs ){
+						fputs( "\t<param name=\"Local\" value=\"", f );
+						print_with_entity_refs( f, Local );
+						fputs( "\">\r\n", f );
+					} else fprintf( f, "\t<param name=\"Local\" value=\"%s\">\r\n", Local );
+					FREE(Local);
+				}
 
 				URL = get_DWORD(entry);
 				if(URL) URL_s = get_urlstr(URL);
-				if(URL_s){ DEPTHPUT(f);  fprintf( f, "\t<param name=\"URL\" value=\"%s\">\r\n", URL_s ); FREE(URL_s); }
+				if(URL_s){
+					DEPTHPUT(f);
+					if( print_entity_refs ){
+						fputs( "\t<param name=\"URL\" value=\"", f );
+						print_with_entity_refs( f, URL_s );
+						fputs( "\">\r\n", f );
+					} else fprintf( f, "\t<param name=\"URL\" value=\"%s\">\r\n", URL_s );
+					FREE(URL_s);
+				}
 
 				FrameName = get_DWORD(entry+4);
 				if(FrameName) FrameName_s = get_urlstr(FrameName);
-				if(FrameName_s){ DEPTHPUT(f); fprintf( f, "\t<param name=\"FrameName\" value=\"%s\">\r\n", FrameName_s ); FREE(FrameName_s); }
+				if(FrameName_s){
+					DEPTHPUT(f);
+					if( print_entity_refs ){
+						fputs( "\t<param name=\"FrameName\" value=\"", f );
+						print_with_entity_refs( f, FrameName_s );
+						fputs( "\">\r\n", f );
+					} else fprintf( f, "\t<param name=\"FrameName\" value=\"%s\">\r\n", FrameName_s );
+					FREE(FrameName_s);
+				}
 
 				return true;
-			} else fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLSTR", strerror(errno) );
-		} else fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLTBL", strerror(errno) );
-	} else fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOPICS", strerror(errno) );
+			} else fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLSTR", strerror(errno) );
+		} else fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLTBL", strerror(errno) );
+	} else fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOPICS", strerror(errno) );
 
 	return false;
 }
@@ -171,10 +194,10 @@ DWORD find_in_urltbl( DWORD majik ){
 		len = fread( buf, 1, 4096, urltbl );
 
 		if( len < 4096 && len%12 )
-			fprintf( stderr, "%s: warning: %s/%s: %s\n", PROGNAME, input, "#URLTBL", "partial entry found" );
+			fprintf( stderr, "%s: warning: %s/%s: %s\n", PACKAGE, input, "#URLTBL", "partial entry found" );
 
 		if( ferror(urltbl) || errno )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#URLTBL", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#URLTBL", strerror(errno) );
 
 		/* We only want complete entries */
 		len = len/12*12;

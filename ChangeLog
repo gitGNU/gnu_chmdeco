@@ -1,3 +1,10 @@
+2005-01-14  Pabs  <pabs@zip.to>
+
+	* chmdeco.nsi, chmdeco.docbook, chmdeco.h, chmdeco-popups, chmdeco.spec.in,
+	common.h, configure.ac, convert.h, hhc.h, hhk.h, hhp.h, magic.chmfile,
+	Makefile.am, misc.h, windows.h:
+	Add GPL notice, get BSD/LICENCE/istorage.exe from ..
+
 2003-08-22  Pabs  <pabs@zip.to>
 
 	* chmdeco.docbook (DOCTYPE): Changed ststem id to the web location, so it

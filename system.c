@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,15 +24,6 @@ http://www.gnu.org
 system.c - this module implements an interface to the #SYSTEM file
 It was written by Pabs.
 */
-
-
-
-/* System headers */
-
-#include <stdio.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 
@@ -73,8 +64,10 @@ bool open_system( void ){
 				if( code < MAX_CODE ){
 					system_entries[code].length = length;
 					system_entries[code].offset = ftell(system_file);
-				} else
-					fprintf( stderr, "%s: warning: %s/%s: %s\n%s", PROGNAME, input, "#SYSTEM", "unknown entry code found", EMAIL_CHM );
+				} else {
+					fprintf( stderr, "%s: warning: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", "unknown entry code found" );
+					EMAIL_CHM;
+				}
 				fseek(system_file, length, SEEK_CUR);
 				/* FIXME: Cache data? */
 			}
@@ -84,7 +77,7 @@ bool open_system( void ){
 		}
 	}
 ERROR:
-	if( errno != ENOENT ) fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", strerror(errno) );
+	if( errno != ENOENT ) fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", strerror(errno) );
 	FCLOSE(system_file);
 	return false;
 }
@@ -92,7 +85,7 @@ ERROR:
 BYTE* get_system(WORD code){
 
 	if( code >= MAX_CODE ){
-		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PROGNAME, input, "#SYSTEM", code );
+		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PACKAGE, input, "#SYSTEM", code );
 		return NULL;
 	}
 
@@ -105,11 +98,11 @@ BYTE* get_system(WORD code){
 			ret[system_entries[code].length]=0;
 			fseek(system_file, system_entries[code].offset, SEEK_SET);
 			if( !fread( ret, system_entries[code].length, 1, system_file) ){
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", strerror(errno) );
 				FREE(ret);
 			}
 
-		} else fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#SYSTEM buffer", strerror(errno) );
+		} else fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#SYSTEM buffer", strerror(errno) );
 		return ret;
 
 	}
@@ -118,7 +111,7 @@ BYTE* get_system(WORD code){
 bool get_system_DWORD(WORD code, DWORD* d){
 
 	if( code >= MAX_CODE ){
-		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PROGNAME, input, "#SYSTEM", code );
+		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PACKAGE, input, "#SYSTEM", code );
 		return false;
 	}
 
@@ -128,11 +121,11 @@ bool get_system_DWORD(WORD code, DWORD* d){
 		bool ret;
 		fseek(system_file, system_entries[code].offset, SEEK_SET);
 		ret = read_DWORD( system_file, d );
-		if(!ret) fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", strerror(errno) );
+		if(!ret) fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", strerror(errno) );
 		return ret;
 
 	} else {
-		fprintf( stderr, "%s: bug: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", "entry too small" );
+		fprintf( stderr, "%s: bug: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", "entry too small" );
 		return false;
 	}
 }
@@ -140,19 +133,19 @@ bool get_system_DWORD(WORD code, DWORD* d){
 bool get_system_to(WORD code, BYTE* buf, WORD length){
 
 	if( code >= MAX_CODE ){
-		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PROGNAME, input, "#SYSTEM", code );
+		fprintf( stderr, "%s: bug: %s/%s: invalid code accessed (%u)\n", PACKAGE, input, "#SYSTEM", code );
 		return false;
 	}
 
 	if( system_entries[code].offset < 0 ){
 		if( length < system_entries[code].length )
-			fprintf( stderr, "%s: bug: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", "not enough storage in buffer" );
+			fprintf( stderr, "%s: bug: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", "not enough storage in buffer" );
 		return false;
 	} else {
 		bool ret;
 		fseek(system_file, system_entries[code].offset, SEEK_SET);
 		ret = fread( buf, system_entries[code].length, 1, system_file) ? true : false;
-		if(!ret) fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#SYSTEM", strerror(errno) );
+		if(!ret) fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#SYSTEM", strerror(errno) );
 		return ret;
 	}
 }

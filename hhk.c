@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,20 +27,11 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-
-
-
 /* Local headers */
 
 #include "chmdeco.h"
 #include "common.h"
+#include "convert.h"
 #include "sitemap.h"
 #include "hhk.h"
 
@@ -73,7 +64,7 @@ void recreate_hhk( void ){
 		do{
 
 			if( !fread(block,12,1,btree) ){
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree", strerror(errno) );
 				break;
 			}
 
@@ -100,7 +91,7 @@ void recreate_hhk( void ){
 					if( !hhk ){
 						hhk = recreate( inf );
 						if( !hhk ){
-							fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", inf, strerror(errno) );
+							fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", inf, strerror(errno) );
 							close_sitemap(); FREE(Name); FCLOSE( btree ); return;
 						}
 
@@ -125,18 +116,34 @@ void recreate_hhk( void ){
 					DEPTHPUT(hhk); fputs("<LI> <OBJECT type=\"text/sitemap\">\r\n",hhk);
 
 					/* Print the name */
-					if(Name){ DEPTHPUT(hhk); fprintf( hhk, "\t<param name=\"Name\" value=\"%s\">\r\n", Name+index ); FREE(Name); }
+					if(Name){
+						DEPTHPUT(hhk);
+						if( print_entity_refs ){
+							fputs( "\t<param name=\"Name\" value=\"", hhk );
+							print_with_entity_refs( hhk, Name+index );
+							fputs( "\">\r\n", hhk );
+						} else fprintf( hhk, "\t<param name=\"Name\" value=\"%s\">\r\n", Name+index );
+						FREE(Name);
+					}
 
 					/* Print the other param's */
 					if(See_Also/*==2*/){
 						See_Also_s = read_UCS_string(btree,&len);
 						space_left -= len*2;
-						if(See_Also_s){ DEPTHPUT(hhk); fprintf( hhk, "\t<param name=\"See Also\" value=\"%s\">\r\n", See_Also_s ); FREE(See_Also_s); }
+						if(See_Also_s){
+							DEPTHPUT(hhk);
+							if( print_entity_refs ){
+								fputs( "\t<param name=\"See Also\" value=\"", hhk );
+								print_with_entity_refs( hhk, See_Also_s );
+								fputs( "\">\r\n", hhk );
+							} else fprintf( hhk, "\t<param name=\"See Also\" value=\"%s\">\r\n", See_Also_s );
+							FREE(See_Also_s);
+						}
 					} else {
 						uint topici;
 						for(topici=0; topici < num_topics && space_left > free_space; topici++){
 							if( !read_DWORD( btree, &index ) ){
-								fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", inf, strerror(errno) );
+								fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", inf, strerror(errno) );
 								FCLOSE(hhk); FCLOSE( btree ); return;
 							}
 							print_topics_entry(hhk,index);
@@ -151,7 +158,7 @@ void recreate_hhk( void ){
 					fseek(btree,8,SEEK_CUR);
 					space_left -= 8;
 				} else
-					fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree", strerror(errno) );
+					fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree", strerror(errno) );
 			}
 
 			/* Go to the next block */
@@ -168,15 +175,15 @@ void recreate_hhk( void ){
 		fputs( SITEMAP_FOOTER, hhk );
 
 		if( ferror(btree) )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree", strerror(errno) );
 		FCLOSE( btree );
 
 		if( ferror(hhk) )
-			fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", inf, strerror(errno) );
+			fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", inf, strerror(errno) );
 		FCLOSE( hhk );
 
 	} else if( errno && errno != ENOENT )
-		fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree", strerror(errno) );
+		fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree", strerror(errno) );
 
 	close_sitemap();
 }
@@ -197,7 +204,7 @@ char* read_UCS_string(FILE* f,uint* len){
 		/* Get more space */
 		t = (char*)realloc(ret,bytes+GROW*2);
 		if( !t ){
-			fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree buffer", strerror(errno) );
+			fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree buffer", strerror(errno) );
 			*len = 0; FREE(ret); return NULL;
 		}
 
@@ -205,7 +212,7 @@ char* read_UCS_string(FILE* f,uint* len){
 
 		/* Get more bytes */
 		if( !fread(start,1,GROW*2,f) || ferror(f)){
-			fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "$WWKeywordLinks/BTree", strerror(errno) );
+			fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "$WWKeywordLinks/BTree", strerror(errno) );
 			*len = 0; FREE(ret); return NULL;
 		}
 

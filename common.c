@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,21 +27,11 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <unistd.h>
-
-
-
 /* Local headers */
 
 #include "common.h"
 
-/* For Windows/DOS */
-#ifndef F_OK
-	#define F_OK 0
-#endif
+
 
 bool exists(char* fname){
 	return !access(fname,F_OK);
@@ -92,4 +82,81 @@ bool read_QWORD( FILE* f, QWORD* q ){
 	if( !fread(b, 8, 1, f) ) return false;
 	*q = get_QWORD(b);
 	return true;
+}
+
+/* read a big endian ENCINT from memory */
+ENCINT get_be_ENCINT( BYTE** b ){
+    ENCINT ret = 0;
+    int shift=0;
+
+    do {
+        ret |= ((**b) & 0x7f) << shift;
+        shift += 7;
+    } while (*((*b)++) & 0x80);
+
+    return ret;
+}
+
+/*
+find the first unset bit in memory
+return the number of set bits found
+return -1 if the buffer runs out before we find an unset bit
+*/
+int ffus(BYTE** byte, int* bit/* , uint len */){
+	int bits = 0;
+	while( **byte & ( 1 << *bit ) ){
+		/* if( !len-- ) return -1; */
+		if(*bit) (*bit)--;
+		else { (*byte)++; *bit = 7; }
+		bits++;
+	}
+	if(*bit) (*bit)--;
+	else { (*byte)++; *bit = 7; }
+	return bits;
+}
+
+/* #ifndef log2
+	#define log2(a) (log(a)/log(2))
+#endif */
+
+/* read a scale & root encoded integer from memory */
+/* Does not yet support s =4, 8, 16, etc */
+SRINT get_SRINT( BYTE** byte, int* bit, BYTE s, BYTE r ){
+	SRINT ret; BYTE mask;
+	int n, n_bits, num_bits, base, count;
+	if( !byte || !*byte || !bit || *bit > 7 || s != 2 )
+		return ~(SRINT)0;
+	ret = 0;
+	count = ffus( byte, bit );
+	n_bits = n = r + /* log2(s) * */ (count ? count-1 : 0) ;
+	while( n > 0 ){
+		num_bits = n > *bit ? *bit : n-1;
+		base = n > *bit ? 0 : *bit - (n-1);
+		switch( num_bits ){
+			case 0: mask = 1; break;
+			case 1: mask = 3; break;
+			case 2: mask = 7; break;
+			case 3: mask = 0xf; break;
+			case 4: mask = 0x1f; break;
+			case 5: mask = 0x3f; break;
+			case 6: mask = 0x7f; break;
+			case 7: mask = 0xff; break;
+                        default:
+                                mask = 0xff;
+                                fputs( "chmdeco: warning: impossible condition found reading s/r int\n", stderr );
+                        break;
+		}
+		mask <<= base;
+		ret = ( ret << (num_bits+1) ) | (SRINT)((**byte & mask) >> base);
+		if( n > *bit ){
+			(*byte)++;
+			n -= *bit+1;
+			*bit = 7;
+		} else {
+			*bit -= n;
+			n = 0;
+		}
+	}
+	if( count ) ret |= (SRINT)1 << n_bits;
+	return ret;
 }

@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,25 +27,18 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-
 /* Local headers */
 
+#include "common.h"
+#include "chmdeco.h"
+#include "strings_file.h"
+
 
 
-#include "chmdeco.h"
-#include "common.h"
-#include "strings.h"
+/* FIXME: Use the blockiness of this file (and the fact that no string crosses
+the boundary) to our advantage */
 
-#define BUF_LEN 5000
+#define BUF_LEN 4096
 
 FILE* strings = NULL;
 off_t strings_len = 0;
@@ -70,7 +63,7 @@ bool open_strings( void ){
 			/* Find out how long the file is */
 			fseek(strings, 0, SEEK_END);
 			strings_len = ftell(strings);
-			fseek(strings, 0, SEEK_SET);
+			fseek(strings, string_buf_len, SEEK_SET);
 
 			if( strings_len != -1 ){
 				atexit(close_strings);
@@ -81,7 +74,7 @@ bool open_strings( void ){
 	}
 
 	/* The #STRINGS file is essential, so always print */
-	fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#STRINGS", strerror(errno) );
+	fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#STRINGS", strerror(errno) );
 
 	return false;
 }
@@ -122,7 +115,7 @@ bool print_string( FILE* f, off_t off ){
 
 			if( !string_buf_len ) return true;
 			else if( ferror(strings) ){
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#STRINGS", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#STRINGS", strerror(errno) );
 				return false;
 			}
 		}
@@ -161,7 +154,7 @@ char* get_string( off_t off ){
 					ret_length += length;
 					strcpy( ret_start, start );
 				} else {
-					fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "#STRINGS buffer", strerror(errno) );
+					fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "#STRINGS buffer", strerror(errno) );
 					FREE( ret ); return NULL;
 				}
 
@@ -175,7 +168,7 @@ char* get_string( off_t off ){
 
 			if( !string_buf_len ) return ret;
 			else if( ferror(strings) ){
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#STRINGS", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#STRINGS", strerror(errno) );
 				FREE( ret ); return NULL;
 			}
 		}

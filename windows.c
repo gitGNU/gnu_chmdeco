@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,22 +27,12 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-
 /* Local headers */
 
 #include "chmdeco.h"
 #include "common.h"
 #include "windows.h"
-#include "strings.h"
+#include "strings_file.h"
 
 
 
@@ -62,19 +52,19 @@ bool open_windows(){
 
 		if( read_DWORD(windows,&num_windows) && num_windows && read_DWORD(windows,&entry_size) ){
 			if( entry_size < 0x10 ){
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#WINDOWS", "entries are too small for this decompiler" );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#WINDOWS", "entries are too small for this decompiler" );
 			} else if( (entry_buf = (BYTE*)malloc(entry_size)) ){
 				atexit(close_windows);
 				return true;
 			} else
-				fprintf( stderr, "%s: %s %s: %s\n", PROGNAME, input, "#WINDOWS buffer", strerror(errno) );
+				fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "#WINDOWS buffer", strerror(errno) );
 		} else if( errno )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#WINDOWS", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#WINDOWS", strerror(errno) );
 
 		FCLOSE(windows);
 
 	} else if( errno != ENOENT )
-		fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#WINDOWS", strerror(errno) );
+		fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#WINDOWS", strerror(errno) );
 
 	return false;
 }
@@ -145,7 +135,7 @@ bool print_windows_entry(FILE* hhp){
 		fprintf( hhp, "%u\r\n", get_DWORD(entry_buf+0x80) );
 		return true;
 	} else if( ferror( windows ) )
-		fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#WINDOWS", strerror(errno) );
+		fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#WINDOWS", strerror(errno) );
 
 	return false;
 }

@@ -2,10 +2,10 @@
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
 Copyright (C) 2003 Pabs
 
-This program is free software; you can redistribute it and/or modify
+This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,23 +27,13 @@ It was written by Pabs.
 
 
 
-/* System headers */
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-
-
 /* Local headers */
 
 #include "chmdeco.h"
 #include "common.h"
+#include "convert.h"
 #include "sitemap.h"
-#include "strings.h"
+#include "strings_file.h"
 #include "hhc.h"
 
 
@@ -88,10 +78,10 @@ void recreate_hhc( void ){
 				FrameName = get_string( get_DWORD(b+0x24) );
 				WindowName = get_string( get_DWORD(b+0x28) );
 			} else
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#IDXHDR", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#IDXHDR", strerror(errno) );
 			FCLOSE( idxhdr );
 		} else if( errno && errno != ENOENT )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#IDXHDR", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#IDXHDR", strerror(errno) );
 
 		fputs(SITEMAP_HEADER,hhc);
 
@@ -101,15 +91,44 @@ void recreate_hhc( void ){
 		if( got_text_site_properties && (FrameName || WindowName || ImageList || ExWindow_Styles != 0xFFFFFFFF || Window_Styles != 0xFFFFFFFF || Background != 0xFFFFFFFF || Foreground != 0xFFFFFFFF || ImageType || Font) ){
 			got_valid_prop = true;
 			fputs( "<OBJECT type=\"text/site properties\">\r\n", hhc );
-				if( FrameName ){ fprintf( hhc, "\t<param name=\"FrameName\" value=\"%s\">\r\n", FrameName ); FREE(FrameName); }
-				if( WindowName ){ fprintf( hhc, "\t<param name=\"WindowName\" value=\"%s\">\r\n", WindowName ); FREE(WindowName); }
-				if( ImageList ){ fprintf( hhc, "\t<param name=\"ImageList\" value=\"%s\">\r\n", ImageList ); FREE(ImageList); }
+				if( print_entity_refs ){
+					if( FrameName ){
+						fputs( "\t<param name=\"FrameName\" value=\"", hhc );
+						print_with_entity_refs( hhc, FrameName );
+						fputs( "\">\r\n", hhc );
+						FREE(FrameName);
+					}
+					if( WindowName ){
+						fputs( "\t<param name=\"WindowName\" value=\"", hhc );
+						print_with_entity_refs( hhc, WindowName );
+						fputs( "\">\r\n", hhc );
+						FREE(WindowName);
+					}
+					if( ImageList ){
+						fputs( "\t<param name=\"ImageList\" value=\"", hhc );
+						print_with_entity_refs( hhc, ImageList );
+						fputs( "\">\r\n", hhc );
+						FREE(ImageList);
+					}
+				} else {
+					if( FrameName ){ fprintf( hhc, "\t<param name=\"FrameName\" value=\"%s\">\r\n", FrameName ); FREE(FrameName); }
+					if( WindowName ){ fprintf( hhc, "\t<param name=\"WindowName\" value=\"%s\">\r\n", WindowName ); FREE(WindowName); }
+					if( ImageList ){ fprintf( hhc, "\t<param name=\"ImageList\" value=\"%s\">\r\n", ImageList ); FREE(ImageList); }
+				}
 				if( Background != 0xFFFFFFFF ) fprintf( hhc, "\t<param name=\"Background\" value=\"0x%x\">\r\n", Background );
 				if( Foreground != 0xFFFFFFFF ) fprintf( hhc, "\t<param name=\"Foreground\" value=\"0x%x\">\r\n", Foreground );
 				if( ExWindow_Styles != 0xFFFFFFFF ) fprintf( hhc, "\t<param name=\"ExWindow Styles\" value=\"0x%x\">\r\n", ExWindow_Styles );
 				if( Window_Styles != 0xFFFFFFFF ) fprintf( hhc, "\t<param name=\"Window Styles\" value=\"0x%x\">\r\n", Window_Styles );
 				if( ImageType ) fputs( "\t<param name=\"ImageType\" value=\"Folder\">\r\n", hhc );
-				if( Font ){ fprintf( hhc, "<param name=\"Font\" value=\"%s\">\r\n", Font ); /* No \t for some reason */ FREE(Font); }
+				if( Font ){
+					/* No \t for some reason */
+					if( print_entity_refs ){
+						fputs( "<param name=\"Font\" value=\"", hhc );
+						print_with_entity_refs( hhc, Font );
+						fputs( "\">\r\n", hhc );
+					} else fprintf( hhc, "<param name=\"Font\" value=\"%s\">\r\n", Font );
+					FREE(Font);
+				}
 			fputs( "</OBJECT>\r\n", hhc );
 		}
 
@@ -129,17 +148,17 @@ void recreate_hhc( void ){
 					close_sitemap();
 				}
 			} else
-				fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOCIDX", strerror(errno) );
+				fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOCIDX", strerror(errno) );
 			FCLOSE( tocidx );
 		} else if( errno && errno != ENOENT )
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOCIDX", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOCIDX", strerror(errno) );
 
 		fputs( SITEMAP_FOOTER, hhc );
 
 		FCLOSE( hhc );
 
 	} else
-		fprintf( stderr, "%s: %s/%s/%s: %s\n", PROGNAME, input, "#recreated", cf, strerror(errno) );
+		fprintf( stderr, "%s: %s/%s/%s: %s\n", PACKAGE, input, "#recreated", cf, strerror(errno) );
 
 	/* Nothing useful */
 	if( !got_valid_prop && !got_tree ){
@@ -193,7 +212,7 @@ bool print_tree( void ){
 					}
 				} else {
 					next = 0;
-					fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOCIDX", strerror(errno) );
+					fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOCIDX", strerror(errno) );
 				}
 			}
 
@@ -201,7 +220,7 @@ bool print_tree( void ){
 			if(next) fseek(tocidx,next,SEEK_SET);
 
 		} else {
-			fprintf( stderr, "%s: %s/%s: %s\n", PROGNAME, input, "#TOCIDX", strerror(errno) );
+			fprintf( stderr, "%s: %s/%s: %s\n", PACKAGE, input, "#TOCIDX", strerror(errno) );
 			break;
 		}
 
