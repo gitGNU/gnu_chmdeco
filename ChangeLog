@@ -1,3 +1,7 @@
+2005-03-07  Pabs  <pabs@zip.to>
+
+	* Makefile.am (nsi): upx compress the exe produced by makensis
+
 2005-01-14  Pabs  <pabs@zip.to>
 
 	* debian/: Remove from CVS - I'll keep this elsewhere to practice debian

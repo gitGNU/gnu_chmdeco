@@ -103,6 +103,7 @@ nsi: nsidir
 	-chmod -R a+r $(nsidir)
 	cd $(nsidir) && makensis /V4 /DPACKAGE="$(PACKAGE)" /DVERSION="$(VERSION)" /DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
 	-rm -rf $(nsidir)
+	-upx $(PACKAGE)-$(VERSION).exe
 
 ## The next few lines can be used if DOCS contains files with extensions
 ##	    ext=`echo -n $$file | sed -e 's/^[^.]*\(.*\)/\1/g'`;
