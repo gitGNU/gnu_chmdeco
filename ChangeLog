@@ -4,6 +4,8 @@
 
 	* Move source into src dir and manpage into doc dir
 
+	* Re-add debian/ directory (but only to CVS, not dist)
+
 2005-01-14  Pabs  <pabs@zip.to>
 
 	* debian/: Remove from CVS - I'll keep this elsewhere to practice debian
