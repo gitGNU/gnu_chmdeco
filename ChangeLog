@@ -1,3 +1,11 @@
+2005-04-04  Paul Wise  <pabs@zip.to>
+
+  * Makefile.am (nsi): 
+    - Don't use upx - nsis already compresses it enough,
+      leaving upx outputting a NotCompressibleException
+    - Try the debian nsis version (uses -switch instead of /switch)
+    - Copy chmdeco.exe from the src/ directory, clean too
+
 2005-03-07  Pabs  <pabs@zip.to>
 
 	* Makefile.am (nsi): upx compress the exe produced by makensis

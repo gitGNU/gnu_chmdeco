@@ -40,6 +40,7 @@ MOSTLYCLEANFILES = *.stackdump
 ## |   The nasty shite below is for people wanting to create binary packages   |
 ## |   Debian (deb), Red Hat et al. (rpm), MS Windows - NSIS installer (nsi)   |
 ## | nsi$ CFLAGS="-mno-cygwin -mconsole -s" ./configure                        |
+## | nsi$ CFLAGS="-mno-cygwin -mconsole -s" ./cross-configure.sh               |
 ## +---------------------------------------------------------------------------+
 
 bindist: deb rpm nsi
@@ -83,11 +84,15 @@ LICENCE:
 istorage.exe:
 	cp -f ../istorage.exe .
 
+chmdeco.exe:
+	cp -f src/chmdeco.exe .
+
+CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe 
+
 nsi: nsidir
 	-chmod -R a+r $(nsidir)
-	cd $(nsidir) && makensis /V4 /DPACKAGE="$(PACKAGE)" /DVERSION="$(VERSION)" /DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
+	cd $(nsidir) && makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi || makensis /V4 /DPACKAGE="$(PACKAGE)" /DVERSION="$(VERSION)" /DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
 	-rm -rf $(nsidir)
-	-upx $(PACKAGE)-$(VERSION).exe
 
 ## The next few lines can be used if DOCS contains files with extensions
 ##	    ext=`echo -n $$file | sed -e 's/^[^.]*\(.*\)/\1/g'`;
