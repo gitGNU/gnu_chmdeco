@@ -83,9 +83,13 @@ LICENCE:
 
 istorage.exe:
 	cp -f ../istorage.exe .
+	-strip istorage.exe
+	-upx --best istorage.exe
 
 chmdeco.exe:
 	cp -f src/chmdeco.exe .
+	-strip chmdeco.exe
+	-upx --best chmdeco.exe
 
 CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe 
 

@@ -5,6 +5,7 @@
       leaving upx outputting a NotCompressibleException
     - Try the debian nsis version (uses -switch instead of /switch)
     - Copy chmdeco.exe from the src/ directory, clean too
+    - Strip and upx compress the exes put in the Windows installer
 
 2005-03-07  Pabs  <pabs@zip.to>
 
