@@ -1,5 +1,10 @@
 2005-01-14  Pabs  <pabs@zip.to>
 
+	* debian/: Remove from CVS - I'll keep this elsewhere to practice debian
+	packaging properly.
+
+2005-01-14  Pabs  <pabs@zip.to>
+
 	* chmdeco.nsi, chmdeco.docbook, chmdeco.h, chmdeco-popups, chmdeco.spec.in,
 	common.h, configure.ac, convert.h, hhc.h, hhk.h, hhp.h, magic.chmfile,
 	Makefile.am, misc.h, windows.h:
