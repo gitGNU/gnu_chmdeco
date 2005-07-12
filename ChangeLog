@@ -1,17 +1,21 @@
 2005-04-06  Paul Wise  <pabs@zip.to>
 
-  * convert.c (lcid_strings): Remove FIXME from 0x0432 - Setsuana (Tswana),
-  HHW ouputs unknown language, the MSDN lists Setsuana, and WinXP release
-  notes list Tswana, so best to keep both names.
+	* hhp.c (recreate_hhp): Print the version of RoboHelp if present
+
+2005-04-06  Paul Wise  <pabs@zip.to>
+
+	* convert.c (lcid_strings): Remove FIXME from 0x0432 - Setsuana (Tswana),
+	HHW ouputs unknown language, the MSDN lists Setsuana, and WinXP release
+	notes list Tswana, so best to keep both names.
 
 2005-04-04  Paul Wise  <pabs@zip.to>
 
-  * Makefile.am (nsi): 
-    - Don't use upx - nsis already compresses it enough,
-      leaving upx outputting a NotCompressibleException
-    - Try the debian nsis version (uses -switch instead of /switch)
-    - Copy chmdeco.exe from the src/ directory, clean too
-    - Strip and upx compress the exes put in the Windows installer
+	  * Makefile.am (nsi):
+		- Don't use upx - nsis already compresses it enough,
+		  leaving upx outputting a NotCompressibleException
+		- Try the debian nsis version (uses -switch instead of /switch)
+		- Copy chmdeco.exe from the src/ directory, clean too
+		- Strip and upx compress the exes put in the Windows installer
 
 2005-03-07  Pabs  <pabs@zip.to>
 

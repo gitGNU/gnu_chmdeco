@@ -112,9 +112,22 @@ void recreate_hhp( void ){
 			}
 
 			{ /* Compiler name */
+				FILE* f;
 				char* compiled_by = (char*)get_system(COMPILED_BY_CODE);
 				if(compiled_by) fprintf( hhp, ";Compiled by: %s\r\n", compiled_by );
 				FREE(compiled_by);
+				f = fopen("#BSSC","rb");
+				if( f != NULL ){
+					char robohelp_version[100] = "";
+					size_t len = 0;
+					fprintf( hhp, ";Prepared using: RoboHelp version " );
+					while( (len = fread( robohelp_version, 1, sizeof(robohelp_version)-1, f )) ){
+						robohelp_version[len-1] = 0;
+						fprintf( hhp, "%s", robohelp_version );
+					}
+					fprintf( hhp, "\r\n" );
+					fclose(f);
+				}
 			}
 
 			/* Compiler language */
