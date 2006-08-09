@@ -1,3 +1,7 @@
+2005-08-09  Paul Wise  <pabs@zip.to>
+
+	* src/Makefile.am (chmdeco_CFLAGS): enable all warnings
+
 2005-04-06  Paul Wise  <pabs@zip.to>
 
 	* hhp.c (recreate_hhp): Print the version of RoboHelp if present
