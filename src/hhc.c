@@ -170,6 +170,7 @@ void recreate_hhc( void ){
 
 #define New  2
 #define BOOK 4
+#define NAME 8
 
 BYTE entry[20];
 
@@ -190,8 +191,21 @@ bool print_tree( void ){
 
 			DEPTHPUT(hhc); fputs("<LI> <OBJECT type=\"text/sitemap\">\r\n",hhc);
 
-			/* This does the work of printing the right topic name etc */
-			ret = print_topics_entry(hhc,topics_index) || ret;
+			if( flags & NAME )
+				/* This does the work of printing the right topic name etc */
+				ret = print_topics_entry(hhc,topics_index) || ret;
+			else{
+				char* Name = get_string(topics_index);
+				if(Name){
+					DEPTHPUT(hhc);
+					if( print_entity_refs ){
+						fputs( "\t<param name=\"Name\" value=\"", hhc );
+						print_with_entity_refs( hhc, Name );
+						fputs( "\">\r\n", hhc );
+					} else fprintf( hhc, "\t<param name=\"Name\" value=\"%s\">\r\n", Name );
+					FREE(Name);
+				}
+			}
 
 			if( flags & New ){
 				DEPTHPUT(hhc); fputs("\t<param name=\"New\" value=\"1\">\r\n",hhc);

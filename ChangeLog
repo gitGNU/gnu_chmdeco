@@ -1,3 +1,9 @@
+2007-03-20  Paul Wise  <pabs@zip.to>
+
+	* src/hhc.c (print_tree): fix bug where TOC items without a file/URL were
+	being given the wrong Name value. Thanks to Razvan Cojocaru for reporting
+	the bug and figuring out the problem.
+
 2005-08-09  Paul Wise  <pabs@zip.to>
 
 	* src/Makefile.am (chmdeco_CFLAGS): enable all warnings
