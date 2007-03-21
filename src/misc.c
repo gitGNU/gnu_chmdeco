@@ -90,11 +90,11 @@ void recreate_fts_stop_list_file( void ){
 													if(stp){
 
 														WORD len;
-														char* s = (char*)buf;
+														BYTE* s = buf;
 														buf[length+1] = buf[length] = 0;
 
 														while( (len = get_WORD(s)) ){
-															s+=2; fwrite(s,len,1,stp); s+=len;
+															s+=2; fwrite((char*)s,len,1,stp); s+=len;
 															fputs( STP_SEPARATOR, stp );
 														}
 
@@ -624,8 +624,8 @@ void recreate_html_from_fts( void ){
 						/* Default in case of errors*/
 						if( !out_file || !*out_file ){
 							if( out_file ) free( out_file );
-							sprintf( entry, "#%d.html", docs_i );
-							out_file = entry;
+							sprintf( (char*)entry, "#%d.html", docs_i );
+							out_file = (char*)entry;
 						}
 
 						mkdirp( out_file );

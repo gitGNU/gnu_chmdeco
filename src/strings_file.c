@@ -152,7 +152,7 @@ char* get_string( off_t off ){
 					ret = t;
 					ret_start = ret + ret_length;
 					ret_length += length;
-					strcpy( ret_start, start );
+					strcpy( ret_start, (char*)start );
 				} else {
 					fprintf( stderr, "%s: %s %s: %s\n", PACKAGE, input, "#STRINGS buffer", strerror(errno) );
 					FREE( ret ); return NULL;
