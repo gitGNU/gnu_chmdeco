@@ -52,13 +52,16 @@ bindist: deb rpm nsi
 
 ## Requires the debhelper debian package
 ## debuild automatically reconfigures, compiles, etc
-deb: debian/changelog debian/compat debian/control debian/copyright debian/docs debian/menu debian/rules debian/watch
+deb: pkg/deb/changelog pkg/deb/compat pkg/deb/control pkg/deb/copyright pkg/deb/docs pkg/deb/rules pkg/deb/watch
+	rm -r debian
+	mkdir debian
+	cp $^ debian
 	debuild
 
 ## Reqires the Redhat Package Manager (rpm)
 ## There is probably a better way, but this is easier
 ## WARNING: Possible automake compatiblity problem (using distdir)
-EXTRA_DIST += chmdeco.spec.in chmdeco.spec
+EXTRA_DIST += pkg/rpm/chmdeco.spec.in pkg/rpm/chmdeco.spec
 rpm: dist
 	rpm --sign -tb $(distdir).tar.gz
 
@@ -69,11 +72,11 @@ rpm: dist
 ## WARNING: Probably a huge automake compatibility problem
 ## WARNING: Probably a huge portability problem
 
-EXTRA_DIST += chmdeco.nsi checks.bmp chmdeco.ico
+EXTRA_DIST += pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico
 nsidir = $(PACKAGE)-$(VERSION)-nsi
 ## DOCS are converted to .txt files with CRLF line endings
 DOCS = README AUTHORS COPYING ChangeLog NEWS THANKS TODO BSD LICENCE
-COPY = chmdeco.nsi checks.bmp chmdeco.exe chmdeco.ico istorage.exe
+COPY = pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico chmdeco.exe istorage.exe
 
 BSD:
 	cp -f ../BSD .

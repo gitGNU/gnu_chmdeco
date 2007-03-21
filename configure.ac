@@ -55,5 +55,5 @@ AC_FUNC_STAT
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([atexit getcwd memchr memset mkdir pathconf strcspn strdup strerror strncasecmp strpbrk strrchr memcpy])
 
-AC_CONFIG_FILES([Makefile doc/Makefile src/Makefile chmdeco.spec])
+AC_CONFIG_FILES([Makefile doc/Makefile src/Makefile pkg/rpm/chmdeco.spec])
 AC_OUTPUT
