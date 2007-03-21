@@ -53,17 +53,18 @@ bindist: deb rpm nsi
 ## Requires the debhelper debian package
 ## debuild automatically reconfigures, compiles, etc
 deb: pkg/deb/changelog pkg/deb/compat pkg/deb/control pkg/deb/copyright pkg/deb/docs pkg/deb/rules pkg/deb/watch
-	rm -r debian
+	-rm -r debian
 	mkdir debian
 	cp $^ debian
-	debuild
+	debuild --no-tgz-check -sd
+	rm -r debian
 
 ## Reqires the Redhat Package Manager (rpm)
 ## There is probably a better way, but this is easier
 ## WARNING: Possible automake compatiblity problem (using distdir)
 EXTRA_DIST += pkg/rpm/chmdeco.spec.in pkg/rpm/chmdeco.spec
 rpm: dist
-	rpm --sign -tb $(distdir).tar.gz
+	rpmbuild --sign -tb $(distdir).tar.gz
 
 ## Requires the NullSoft Installer System (NSIS) of Winamp fame
 ## This is a bit more complex, cause we have to transform stuff
@@ -89,7 +90,7 @@ istorage.exe:
 	-strip istorage.exe
 	-upx --best istorage.exe
 
-chmdeco.exe:
+chmdeco.exe: src/chmdeco.exe
 	cp -f src/chmdeco.exe .
 	-strip chmdeco.exe
 	-upx --best chmdeco.exe
@@ -98,7 +99,7 @@ CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe
 
 nsi: nsidir
 	-chmod -R a+r $(nsidir)
-	cd $(nsidir) && makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi || makensis /V4 /DPACKAGE="$(PACKAGE)" /DVERSION="$(VERSION)" /DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
+	cd $(nsidir) && makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
 	-rm -rf $(nsidir)
 
 ## The next few lines can be used if DOCS contains files with extensions
@@ -106,28 +107,22 @@ nsi: nsidir
 ##	    if test "x$$ext" = x; then ext=".txt"; else ext=""; fi;
 ##	    || awk 'BEGIN { ORS = "\r\n" } { print }' < $$d/$$file > $(nsidir)/$$file$$ext || :; \
 
-nsidir: $(DOCS) $(COPY)
+nsidir: build-win32 $(DOCS) $(COPY)
 	-rm -rf $(nsidir)
 	mkdir $(nsidir)
 	-chmod 777 $(nsidir)
 	@for file in $(DOCS); do \
 	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(nsidir)/$$file; \
-	  else \
-	    test -f $(nsidir)/$$file \
-	    || unix2dos < $$d/$$file > $(nsidir)/$$file.txt || :; \
-	  fi; \
+	  unix2dos < $$d/$$file > $(nsidir)/$$file.txt ; \
 	done
 	@for file in $(COPY); do \
 	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(nsidir)/$$file; \
-	  else \
-	    test -f $(nsidir)/$$file \
-	    || cp -p $$d/$$file $(nsidir)/$$file || :; \
-	  fi; \
+	  cp -p $$d/$$file $(nsidir)/; \
 	done
+
+build-win32:
+	./configure --host=i586-mingw32msvc
+	make
 
 ## FIXME: Add an Microsoft Installer package (msi)
 ## FIXME: If only to learn about MSIs & reverse their internal formats
