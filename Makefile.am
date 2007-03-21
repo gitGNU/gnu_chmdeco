@@ -77,51 +77,43 @@ EXTRA_DIST += pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico
 nsidir = $(PACKAGE)-$(VERSION)-nsi
 ## DOCS are converted to .txt files with CRLF line endings
 DOCS = README AUTHORS COPYING ChangeLog NEWS THANKS TODO BSD LICENCE
-COPY = pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico chmdeco.exe istorage.exe
-
-BSD:
-	cp -f ../BSD .
-
-LICENCE:
-	cp -f ../LICENCE .
-
-istorage.exe:
-	cp -f ../istorage.exe .
-	-strip istorage.exe
-	-upx --best istorage.exe
-
-chmdeco.exe: src/chmdeco.exe
-	cp -f src/chmdeco.exe .
-	-strip chmdeco.exe
-	-upx --best chmdeco.exe
-
+EXT_COPY = ../BSD ../LICENCE ../istorage.exe
+SRC_COPY = pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico
+BLD_COPY = src/chmdeco.exe istorage.exe
+CRUNCH = chmdeco.exe istorage.exe
 CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe 
 
 nsi: nsidir
-	-chmod -R a+r $(nsidir)
-	cd $(nsidir) && makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" chmdeco.nsi
+	makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" $(nsidir)/chmdeco.nsi
 	-rm -rf $(nsidir)
 
-## The next few lines can be used if DOCS contains files with extensions
-##	    ext=`echo -n $$file | sed -e 's/^[^.]*\(.*\)/\1/g'`;
-##	    if test "x$$ext" = x; then ext=".txt"; else ext=""; fi;
-##	    || awk 'BEGIN { ORS = "\r\n" } { print }' < $$d/$$file > $(nsidir)/$$file$$ext || :; \
-
-nsidir: build-win32 $(DOCS) $(COPY)
+nsidir: build-win32
 	-rm -rf $(nsidir)
 	mkdir $(nsidir)
-	-chmod 777 $(nsidir)
-	@for file in $(DOCS); do \
-	  d=$(srcdir); \
-	  unix2dos < $$d/$$file > $(nsidir)/$$file.txt ; \
+	@for file in $(EXT_COPY); do \
+	  cp -p $(srcdir)/$$file .; \
 	done
-	@for file in $(COPY); do \
-	  d=$(srcdir); \
-	  cp -p $$d/$$file $(nsidir)/; \
+	@for file in $(DOCS); do \
+	  test -e $(srcdir)/$$file && \
+	  unix2dos < $(srcdir)/$$file > $(nsidir)/$$file.txt ; \
+	  test -e $$file && \
+	  unix2dos < $$file > $(nsidir)/$$file.txt ; \
+	done
+	@for file in $(SRC_COPY); do \
+	  cp -p $(srcdir)/$$file $(nsidir)/; \
+	done
+	@for file in $(BLD_COPY); do \
+	  cp -p $$file $(nsidir)/; \
+	done
+	@for file in $(CRUNCH); do \
+	  d=$(nsidir); \
+	  strip $$d/$$file; \
+	  upx --best $$d/$$file; \
 	done
 
-build-win32:
-	./configure --host=i586-mingw32msvc
+
+build-win32: $(srcdir)/configure
+	$(srcdir)/configure --host=i586-mingw32msvc
 	make
 
 ## FIXME: Add an Microsoft Installer package (msi)
