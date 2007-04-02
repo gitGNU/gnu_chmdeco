@@ -77,6 +77,7 @@ EXTRA_DIST += pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico
 nsidir = $(PACKAGE)-$(VERSION)-nsi
 ## DOCS are converted to .txt files with CRLF line endings
 DOCS = README AUTHORS COPYING ChangeLog NEWS THANKS TODO BSD LICENCE
+DOCSTXT = README.txt AUTHORS.txt COPYING.txt ChangeLog.txt NEWS.txt THANKS.txt TODO.txt BSD.txt LICENCE.txt
 EXT_COPY = ../BSD ../LICENCE ../istorage.exe
 SRC_COPY = pkg/nsi/chmdeco.nsi pkg/nsi/checks.bmp pkg/nsi/chmdeco.ico
 BLD_COPY = src/chmdeco.exe istorage.exe
@@ -84,7 +85,7 @@ CRUNCH = chmdeco.exe istorage.exe
 CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe 
 
 nsi: nsidir
-	makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(addsuffix .txt,$(DOCS))" $(nsidir)/chmdeco.nsi
+	makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(DOCSTXT)" $(nsidir)/chmdeco.nsi
 	-rm -rf $(nsidir)
 
 nsidir: build-win32
