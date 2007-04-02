@@ -1,25 +1,31 @@
+New in 0.3.2:
+* Fix a bug in the .hhc generation
+* Print the version of RoboHelp used
+* Some packaging updates
+
 New in 0.3.1:
 * Added the GPL notice to more files
+
 New in 0.3:
 * Debian, RPM, Win32 installer packaging
 * built using autoconf & automake
 * bugfixes - fixed [FILES] on MinGW, -f with subdirs, et al
-
+
 New in 0.2.1:
 * THANKS file added
 * README contains legality warning
 * better language strings
 * bugfixes - big aliases, [FILES] on MinGW, internals in [FILES]
-
+
 New in 0.2:
 * -e, -f options added
 * magic.chmfile for file(1) added
-
+
 New in 0.1.1:
 * NEWS, AUTHORS, ChangeLog added
 * alleged FILETIME output ripped out
 * Alias/map, crash, small fixes
-
+
 New in 0.1:
 * supports hhp, hhc, hhk output
 * supports alias/map, stp output
