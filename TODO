@@ -4,10 +4,34 @@ Options:
 
 Features:
 	recreate hhc/k without the #TOCIDX/BTree files - maybe impossible
-	samples - need proper recursive dir search
+		#TOCIDX
+			children are after their parents
+			can get which except the last are books, which are pages
+				last can proably be guessed using #TOPICS file - no url
+			some intelligent routines decide which things are parents of which nodes
+			or do a dumb dump (for now)
+		BTree
+			can just dump out all the #TOPICS entries that are from the hhk
+			not accurate in terms of parent/child etc or keywords, but good enough
+				still need to warn the user though
+	samples - need proper case insensitive recursive dir search
+		glob( "samples", GLOB_NOSORT|GLOB_MARK, NULL )?
 	[TEXT POPUPS] - "
 	html file processing:
 		alinks - need a html editing parser & a general ww-links-btree interface
 		split - ", maybe impossible
-	recreate HTML files from the $FIftiMain file (search info)
-		- this is no joke it may actually be possible
+	detect klinks added to the index by comparing the sitemap and recreated hhks
+	guess names of context ids based on title etc (ala helpdeco)
+	different backends: filesystem (unix, win32, mac?), chmlib, ms-its
+		file search
+		stat
+		open, close, read, seek, tell...
+		no_hard_links()
+		path manipulation
+
+Packaging:
+	test rpm package
+	autoconfiscate the source
+	make -popups script a better wrapper
+	convert README into documentation
+	use macros from ac-archive
