@@ -4,7 +4,7 @@
 <!--
 
 chmdeco - extract files from ITS/CHM files and decompile CHM files
-Copyright (C) 2003 Pabs
+Copyright 2003-2007 Paul Wise
 
 This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@ chmdeco.1: chmdeco.docbook
 	docbook-to-man $< > $@
 -->
 
-	<!ENTITY firstname "<firstname>Pabs</firstname>">
-	<!ENTITY surname   "<surname></surname>">
+	<!ENTITY firstname "<firstname>Paul</firstname>">
+	<!ENTITY surname   "<surname>Wise</surname>">
 	<!ENTITY date      "<date>March 28, 2003</date>">
 	<!ENTITY section   "<manvolnum>1</manvolnum>">
 	<!ENTITY email     "<email>pabs@zip.to</email>">
@@ -45,7 +45,11 @@ chmdeco.1: chmdeco.docbook
 	<refentryinfo>
 		<address>&email;</address>
 		<author>&firstname; &surname;</author>
-		<copyright><year>2003</year><holder>&username;</holder></copyright>
+		<copyright>
+      <year>2003</year>
+      <year>2007</year>
+      <holder>&username;</holder>
+    </copyright>
 		&date;
 	</refentryinfo>
 	<refmeta>&ucpackage; &section;</refmeta>

@@ -1,6 +1,6 @@
 /*
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
-Copyright (C) 2003 Pabs
+Copyright 2003-2007 Paul Wise
 
 This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ http://www.gnu.org
 
 /*
 chmdeco.c - this module implements decompilation of CHMs
-It was written by Pabs.
+It was written by Paul Wise.
 */
 
 
@@ -283,7 +283,7 @@ void print_usage( void ){
 	fprintf( stderr, "\t-s\n\t\tTurn off printing the compilation stats at the start of the hhp\n" );
 	fprintf( stderr, "\t-v\n\t\tPrint version and usage on stderr, then exit\n" );
 	fprintf( stderr, "\t--\n\t\tTurn off options processing for the rest of the arguments\n" );
-	fprintf( stderr, "\nCopyright (C) 2003 %s %s\nThis free software, distributed under the GNU GPL.\n", AUTHOR, AUTHOR_EMAIL );
+	fprintf( stderr, "\nCopyright 2003-2007 %s %s\nThis free software, distributed under the GNU GPL.\n", AUTHOR, AUTHOR_EMAIL );
 	fprintf( stderr, "See the source for more details and note there is NO WARRANTY of ANY kind.\n" );
 	fprintf( stderr, "See the website for updates: %s\n", WEBSITE );
 	exit(0);

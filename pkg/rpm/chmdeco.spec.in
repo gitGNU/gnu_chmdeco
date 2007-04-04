@@ -1,5 +1,5 @@
 # chmdeco -- extract files from ITS/CHM files and decompile CHM files
-# Copyright (C) 2003 Pabs
+# Copyright 2003-2007 Paul Wise
 
 # This file is part of chmdeco; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ Group: Applications/Emulators
 Copyright: GPL
 Source: http://download.savannah.gnu.org/releases/chmdeco/%{name}-%{version}.tar.gz
 URL: http://savannah.nongnu.org/projects/chmdeco
-Vendor: Pabs <pabs@zip.to>
+Vendor: Paul Wise <pabs@zip.to>
 BuildRoot: /var/tmp/%{name}-%{version}-root
 Prefix: /usr
 

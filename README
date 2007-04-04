@@ -1,5 +1,5 @@
 chmdeco -- decompile CHM files and extract files from ITS files (future)
-Copyright (C) 2003 Pabs, <pabs@zip.to>
+Copyright 2003-2007 Paul Wise
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -192,5 +192,5 @@ HTML into DocBook. The website is http://chmspec.nongnu.org/
 
 
 Enjoy
-Pabs <pabs@zip.to>
+Paul Wise <pabs@zip.to>
 http://pabs.zip.to

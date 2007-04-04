@@ -1,5 +1,5 @@
 ; chmdeco -- extract files from ITS/CHM files and decompile CHM files
-; Copyright (C) 2003 Pabs
+; Copyright 2003-2007 Paul Wise
 
 ; This file is part of chmdeco; you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*
 chmdeco -- extract files from ITS/CHM files and decompile CHM files
-Copyright (C) 2003 Pabs
+Copyright 2003-2007 Paul Wise
 
 This file is part of chmdeco; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -217,7 +217,7 @@ ENCINT get_be_ENCINT( BYTE** b );
 SRINT get_SRINT( BYTE** byte, int* bit, BYTE s, BYTE r );
 
 
-#define AUTHOR "Pabs"
+#define AUTHOR "Paul Wise"
 #define AUTHOR_EMAIL "<pabs@zip.to>"
 #define WEBSITE "http://pabs.zip.to"
 #define EMAIL_CHM fprintf( stderr, "%s", "Please email "AUTHOR" "AUTHOR_EMAIL" about this chm.\n" )
