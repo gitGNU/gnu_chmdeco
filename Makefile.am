@@ -85,7 +85,7 @@ CRUNCH = chmdeco.exe istorage.exe
 CLEANFILES=BSD LICENCE istorage.exe chmdeco.exe 
 
 nsi: nsidir
-	makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(DOCSTXT)" $(nsidir)/chmdeco.nsi
+	makensis -V4 -DPACKAGE="$(PACKAGE)" -DVERSION="$(VERSION)" -DDOCS="$(DOCSTXT)" -DUPX="$(UPX)" $(nsidir)/chmdeco.nsi
 	-rm -rf $(nsidir)
 
 nsidir: build-win32

@@ -30,7 +30,7 @@ AC_EXEEXT
 AC_PROG_INSTALL
 AC_PROG_AWK
 AC_CHECK_TOOL([STRIP],[strip])
-# FIXME: check for upx and petite for nsi compression
+AC_PATH_PROG([UPX],[upx])
 
 # Checks for libraries.
 

@@ -21,14 +21,15 @@
 
 ; Compression
 SetCompress auto
-SetCompressor bzip2
+SetCompressor /SOLID lzma
 
-; FIXME: Compress the installer exe header with UPX/Petite
-;!ifdef HAVE_UPX
-;  !packhdr tmp.dat 'upx --best --compress-icons=1 tmp.dat'
-;!else ifdef HAVE_PETITE
-;  !packhdr tmp.dat 'petite -9 -b0 -r** -p0 -y tmp.dat'
-;!endif
+; Compress the installer exe header with UPX
+!ifdef UPX
+!if "${UPX}" != ""
+  !tempfile PACKHDRTEMP
+  !packhdr "${PACKHDRTEMP}" '"${UPX}" --best --compress-icons=1 "${PACKHDRTEMP}"'
+!endif
+!endif
 
 ; Package & version come from command line.
 ; This prevents the need for another .in file.
