@@ -204,9 +204,7 @@ Function .onInit
 	usernoprompt:
 		StrCpy $9 "user"
 		SetShellVarContext current
-		ReadRegStr $R1 HKCU 'Volatile Environment' 'HOMEDRIVE'
-		ReadRegStr $R2 HKCU 'Volatile Environment' 'HOMEPATH'
-		StrCpy $INSTDIR '$R1$R2\${PSV}'
+		StrCpy $INSTDIR '$DOCUMENTS\${PSV}'
 		Goto done
 
 	adminnt:
