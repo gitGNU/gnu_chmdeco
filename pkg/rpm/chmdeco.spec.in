@@ -22,8 +22,8 @@ Version: @VERSION@
 Release: 1
 Group: Applications/Emulators
 Copyright: GPL
-Source: http://bonedaddy.net/pabs3/hhm/%{name}-%{version}.tar.gz
-URL: http://bonedaddy.net/pabs3/hhm/#chmdeco
+Source: http://download.savannah.gnu.org/releases/chmdeco/%{name}-%{version}.tar.gz
+URL: http://savannah.nongnu.org/projects/chmdeco
 Vendor: Pabs <pabs@zip.to>
 BuildRoot: /var/tmp/%{name}-%{version}-root
 Prefix: /usr

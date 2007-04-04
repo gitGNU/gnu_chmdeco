@@ -47,9 +47,9 @@ You need a program that extracts files from InfoTech Storage files
 (.its/.chm), so that chmdeco can get at the internal files it needs. On
 Unix you can use chmdump by Matthew T. Russotto, which is available from
 http://www.speakeasy.org/~russotto/chm/ or chmlib by Jed Wing, which is
-available from http://66.93.236.84/~jedwin/projects/chmlib/. On Win32 you
-can use istorage, which was written by me & is both included in the binary
-distribution and available from http://pabs.zip.to/prog.html#istorage
+available from http://www.jedrea.com/chmlib/. On Win32 you can use istorage,
+which was written by me & is both included in the binary distribution and
+available from http://bonedaddy.net/pabs3/code/#istorage
 
 
 Building, usage & testing:
@@ -74,7 +74,7 @@ On Windows:
 On Unix:
 
 #You should have done the next 2 lines already
-#wget http://bonedaddy.net/pabs3/chm/chmdeco-<version>.tar.gz
+#wget http://download.savannah.gnu.org/releases/chmdeco/chmdeco-<version>.tar.gz
 #tar zxvf chmdeco-<version>.tar.gz
 wget http://www.speakeasy.org/~russotto/chm/chmtools.tar.gz
 tar zxvf chmtools.tar.gz
@@ -188,7 +188,7 @@ More info:
 
 I've written a specification on the internal files of CHMs and other related
 stuff. It was released in late April/early June 2003, after was converted from
-HTML into DocBook. The website is http://bonedaddy.net/pabs3/hhm/#chmspec
+HTML into DocBook. The website is http://chmspec.nongnu.org/
 
 
 Enjoy
