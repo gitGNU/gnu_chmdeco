@@ -4,6 +4,7 @@
 ## The manpage and how to create it
 dist_man_MANS = chmdeco.1
 CLEANFILES = $(dist_man_MANS)
+MAINTAINERCLEANFILES = Makefile.in
 EXTRA_DIST = chmdeco.docbook
 chmdeco.1: chmdeco.docbook
 	docbook-to-man $< > $@ || \

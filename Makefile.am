@@ -35,6 +35,7 @@ EXTRA_DIST = magic.chmfile
 
 ## Cygwin programs dump *.stackdump's not *.core
 MOSTLYCLEANFILES = *.stackdump
+MAINTAINERCLEANFILES = Makefile.in COPYING INSTALL aclocal.m4 config.h.in configure depcomp install-sh missing
 
 ## +---------------------------------------------------------------------------+
 ## |   The nasty shite below is for people wanting to create binary packages   |

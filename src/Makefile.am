@@ -8,3 +8,5 @@ chmdeco.h common.h convert.h hhc.h hhk.h hhp.h misc.h sitemap.h strings_file.h s
 
 # Turn on all warnings
 AM_CFLAGS = -Wall
+
+MAINTAINERCLEANFILES = Makefile.in
