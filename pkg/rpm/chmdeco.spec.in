@@ -61,4 +61,5 @@ rm -rf ${RPM_BUILD_ROOT}
 %defattr(0644, root, root, 0755)
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO THANKS
 %attr(0755, root, root) %{_bindir}/chmdeco
+%attr(0755, root, root) %{_bindir}/chmdeco-popups
 %{_mandir}/man1/chmdeco.1*
