@@ -34,7 +34,7 @@ chmdeco.1: chmdeco.docbook
 	<!ENTITY surname   "<surname>Wise</surname>">
 	<!ENTITY date      "<date>March 28, 2003</date>">
 	<!ENTITY section   "<manvolnum>1</manvolnum>">
-	<!ENTITY email     "<email>pabs@zip.to</email>">
+	<!ENTITY email     "<email>pabs3@bonedaddy.net</email>">
 	<!ENTITY username  "Pabs">
 	<!ENTITY ucpackage "<refentrytitle>CHMDECO</refentrytitle>">
 	<!ENTITY package   "chmdeco">

@@ -218,8 +218,8 @@ SRINT get_SRINT( BYTE** byte, int* bit, BYTE s, BYTE r );
 
 
 #define AUTHOR "Paul Wise"
-#define AUTHOR_EMAIL "<pabs@zip.to>"
-#define WEBSITE "http://pabs.zip.to"
+#define AUTHOR_EMAIL "<pabs3@bonedaddy.net>"
+#define WEBSITE "http://chmspec.nongnu.org/"
 #define EMAIL_CHM fprintf( stderr, "%s", "Please email "AUTHOR" "AUTHOR_EMAIL" about this chm.\n" )
 
 #endif /* _COMMON_H_ */

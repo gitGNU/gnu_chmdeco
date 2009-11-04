@@ -18,7 +18,7 @@
 
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT([CHM Decompiler], [0.3.1], [pabs@zip.to], [chmdeco])
+AC_INIT([CHM Decompiler], [0.3.1], [pabs3@bonedaddy.net], [chmdeco])
 AC_CONFIG_SRCDIR([src/chmdeco.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE

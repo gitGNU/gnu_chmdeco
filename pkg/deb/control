@@ -1,7 +1,7 @@
 Source: chmdeco
 Section: utils
 Priority: optional
-Maintainer: Paul Wise <pabs@zip.to>
+Maintainer: Paul Wise <pabs3@bonedaddy.net>
 Build-Depends: debhelper (>= 5.0.0), cdbs, docbook-to-man | xmlto | docbook-utils
 Standards-Version: 3.7.6
 
