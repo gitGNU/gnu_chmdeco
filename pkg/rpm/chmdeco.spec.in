@@ -21,7 +21,7 @@ Name: @PACKAGE@
 Version: @VERSION@
 Release: 1
 Group: Applications/Emulators
-Copyright: GPL
+License: GPL
 Source: http://download.savannah.gnu.org/releases/chmdeco/%{name}-%{version}.tar.gz
 URL: http://savannah.nongnu.org/projects/chmdeco
 Vendor: Paul Wise <pabs@zip.to>
